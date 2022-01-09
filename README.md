@@ -1,5 +1,6 @@
-# <p align="center"> Burke's Study Guide For AZ-204!
-### <p align="center"> :collision: :weary: :question: :books: :computer: :headphones: :metal: :coffee: :muscle: :heavy_check_mark: :smirk:</center>     
+
+# <p align="center"> Burke's Study Guide For AZ-204!</p>
+## <p align="center"> :collision: :weary: :question: :books: :computer: :headphones: :metal: :coffee: :muscle: :heavy_check_mark: :smirk:</p>    
 
 
 ___
