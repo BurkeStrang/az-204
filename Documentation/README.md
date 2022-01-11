@@ -1,5 +1,5 @@
-## <center>Burke's Study Guide For AZ-204!</center>
-### <center> :collision: :weary: :question: :books: :computer: :headphones: :metal: :coffee: :muscle: :heavy_check_mark: :smirk:</center>     
+## <p align="center">Burke's Study Guide For AZ-204!
+###  <p align="center">:collision: :weary: :question: :books: :computer: :headphones: :metal: :coffee: :muscle: :heavy_check_mark: :smirk:   
 
 
 ___
@@ -25,7 +25,7 @@ The following image shows the role Azure Resource Manager plays in handling Azur
 
 ---
 
-#<ins>[ARM Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/)
+# <ins>[ARM Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/)
 
 
 ### Basics
