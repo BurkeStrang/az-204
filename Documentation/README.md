@@ -443,7 +443,7 @@ Determine scenarios that warrant a particlulary consistency
 
 ## Geo-Replication
 
-# [Blob Containers]()
+# <ins>[Blob Containers](https://docs.microsoft.com/en-us/azure/storage/blobs/)
 Azure Blob storage is Microsoft's object storage solution for the cloud. Blob storage is optimized for storing massive amounts of unstructured data. Unstructured data is data that doesn't adhere to a particular data model or definition, such as text or binary data.
 
 Blob storage is designed for:
@@ -454,8 +454,52 @@ Blob storage is designed for:
 * Writing to log files.
 * Storing data for backup and restore, disaster recovery, and archiving.
 * Storing data for analysis by an on-premises or Azure-hosted service.
-# [Azure Authentication]()
+# <ins>[Azure Authentication](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/)
+Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and access management service, which helps your employees sign in and access resources in:
 
+* External resources, such as Microsoft 365, the Azure portal, and thousands of other SaaS applications.
+
+* Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization
+## Multi-Factor Authentication
+
+# <ins> [Azure Access Control](https://docs.microsoft.com/en-us/azure/role-based-access-control/)
+
+Azure role-based access control (Azure RBAC) is a system that provides fine-grained access management of Azure resources. Using Azure RBAC, you can segregate duties within your team and grant only the amount of access to users that they need to perform their jobs.
+
+## Shared Access Signature
+A shared access signature (SAS) is a URI that grants restricted access rights to Azure Storage resources. You can provide a shared access signature to clients who should not be trusted with your storage account key but to whom you wish to delegate access to certain storage account resources. By distributing a shared access signature URI to these clients, you can grant them access to a resource for a specified period of time, with a specified set of permissions.
+
+The URI query parameters comprising the SAS token incorporate all of the information necessary to grant controlled access to a storage resource. A client who is in possession of the SAS can make a request against Azure Storage with just the SAS URI, and the information contained in the SAS token is used to authorize the request.
+
+# <ins>[Secure Data]()
+
+## [Azure Key Vault](https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references)
+
+# <ins>[Scaling Apps and Services](https://docs.microsoft.com/en-us/azure/app-service/manage-scale-up#:~:text=In%20your%20App%20Service%20app,options%20to%20show%20more%20tiers.)
+
+There are two workflows for scaling, scale up and scale out, and this article explains the scale up workflow.
+
+* **Scale up**: Get more CPU, memory, disk space, and extra features like dedicated virtual machines (VMs), custom domains and certificates, staging slots, autoscaling, and more. You scale up by changing the pricing tier of the App Service plan that your app belongs to.
+* **Scale out**: Increase the number of VM instances that run your app. You can scale out to as many as 30 instances, depending on your pricing tier. App Service Environments in Isolated tier further increases your scale-out count to 100 instances. For more information about scaling out, see Scale instance count manually or automatically. There, you find out how to use autoscaling, which is to scale instance count automatically based on predefined rules and schedules.
+
+The scale settings take only seconds to apply and affect all apps in your App Service plan. They don't require you to change your code or redeploy your application.
+
+## Manual Scalling of Azure App Service
+## Automatic Scalling of Azure App Service
+
+## Virtual Machine Scale Sets
+
+# <ins> [Redis Cache](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/)
+Azure Cache for Redis provides an in-memory data store based on the Redis software. Redis improves the performance and scalability of an application that uses backend data stores heavily. It's able to process large volumes of application requests by keeping frequently accessed data in the server memory, which can be written to and read from quickly. Redis brings a critical low-latency and high-throughput data storage solution to modern applications.
+
+Azure Cache for Redis offers both the Redis open-source (OSS Redis) and a commercial product from Redis Labs (Redis Enterprise) as a managed service. It provides secure and dedicated Redis server instances and full Redis API compatibility. The service is operated by Microsoft, hosted on Azure, and usable by any application within or outside of Azure.
+
+Azure Cache for Redis can be used as a distributed data or content cache, a session store, a message broker, and more. It can be deployed as a standalone. Or, it can be deployed along with other Azure database services, such as Azure SQL or Cosmos DB.
+
+# <ins> [CDN](https://docs.microsoft.com/en-us/azure/cdn/)
+Azure Content Delivery Network (CDN) is a global CDN solution for delivering high-bandwidth content. It can be hosted in Azure or any other location. With Azure CDN, you can cache static objects loaded from Azure Blob storage, a web application, or any publicly accessible web server, by using the closest point of presence (POP) server. Azure CDN can also accelerate dynamic content, which cannot be cached, by leveraging various network and routing optimizations.
+
+# <ins> [Monitoring and Logging]()
 # <ins>Glossary
 
 
