@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "252995da-462a-4f82-a205-5b1e320dd70e": {
+      "ProjectGuid": "252995da-462a-4f82-a205-5b1e320dd70e",
+      "DisplayName": "ConnectToDBApp",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

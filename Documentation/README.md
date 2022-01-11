@@ -13,7 +13,7 @@ The following image shows the role Azure Resource Manager plays in handling Azur
 
 ![](AzureResourceManager.png)
 
-##Terminology
+## Terminology
 
 * **resource** - A manageable item that is available through Azure. Virtual machines, storage accounts, web apps, databases, and virtual networks are examples of resources. Resource groups, subscriptions, management groups, and tags are also examples of resources.
 * **resource group** - A container that holds related resources for an Azure solution. The resource group includes those resources that you want to manage as a group. You decide which resources belong in a resource group based on what makes the most sense for your organization. See Resource groups.
@@ -417,7 +417,7 @@ An Azure storage account contains all of your Azure Storage data objects: blobs,
 
 ## Replication
 
-# [CosomosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
+# <ins> [CosomosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
 Azure Cosmos DB is a fully managed NoSQL database for modern app development. Single-digit millisecond response times, and automatic and instant scalability, guarantee speed at any scale. Business continuity is assured with SLA-backed availability and enterprise-grade security. App development is faster and more productive thanks to turnkey multi region data distribution anywhere in the world, open source APIs and SDKs for popular languages. As a fully managed service, Azure Cosmos DB takes database administration off your hands with automatic management, updates and patching. It also handles capacity management with cost-effective serverless and automatic scaling options that respond to application needs to match capacity with demand.
 
 ## Partition Key
@@ -433,10 +433,27 @@ Your container will require more than a few physical partitions when either of t
 
 * Your container will store over 100 GB of data
 
-# [SQL Database]()
+## Indexing
+
+## Data Consistency
+Determine scenarios that warrant a particlulary consistency 
+
+## Change Feed
+# <ins> [SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/)
+
+## Geo-Replication
 
 # [Blob Containers]()
+Azure Blob storage is Microsoft's object storage solution for the cloud. Blob storage is optimized for storing massive amounts of unstructured data. Unstructured data is data that doesn't adhere to a particular data model or definition, such as text or binary data.
 
+Blob storage is designed for:
+
+* Serving images or documents directly to a browser.
+* Storing files for distributed access.
+* Streaming video and audio.
+* Writing to log files.
+* Storing data for backup and restore, disaster recovery, and archiving.
+* Storing data for analysis by an on-premises or Azure-hosted service.
 # [Azure Authentication]()
 
 # <ins>Glossary
