@@ -230,7 +230,8 @@ interfaces (RDMA).”
 * Hybrid Benefit - pay for Windows & SQL Server licenses through Enterprise
 Agreement, likely cheaper
 
-
+## [Custom Script Extension](https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows)
+The Custom Script Extension downloads and executes scripts on Azure virtual machines. This extension is useful for post deployment configuration, software installation, or any other configuration or management tasks. Scripts can be downloaded from Azure storage or GitHub, or provided to the Azure portal at extension run time. The Custom Script Extension integrates with Azure Resource Manager templates, and can be run using the Azure CLI, PowerShell, Azure portal, or the Azure Virtual Machine REST API.
 ## Notes
 * Permanent Storage charged separately
 * Public IP addresses have a cost
@@ -320,15 +321,29 @@ Azure App Service enables you to build and host web apps, mobile back ends, and 
 Spend time reading through the different plans and think about what features are available in each e.g. can auto scale on the standard plan but not the basic.
 https://azure.microsoft.com/en-us/pricing/details/app-service/windows/
 
+## DNS
+You can configure Azure DNS to host a custom domain for your web apps. For example, you can create an Azure web app and have your users access it using either www.contoso.com or contoso.com as a fully qualified domain name (FQDN).
+
+To do this, you have to create three records:
+* A root "A" record pointing to contoso.com
+* A root "TXT" record for verification
+* A "CNAME" record for the www name that points to the A record
+
 ## Deployment Slots
 Allow for multiple apps for staging and production etc. You can swap apps and set traffic percentage as needed.
 
 ## Notes
-* web jobs are background jobs
+* Web jobs are background jobs. Be aware of supported languages like: Windows Binary (EXE), Powershell, Javascript etc.
+* You cannot deploy new or updated App Service code by uploading to the Portal.
+* The maximum number of apps you can install in a single App Service free account is 10
 
 ## Additional Resources
 
 https://www.youtube.com/watch?v=4BwyqmRTrx8&t=46s
+
+
+# <ins> [App Service Environment](https://docs.microsoft.com/en-us/azure/app-service/environment/)
+The Azure App Service Environment is an Azure App Service feature that provides a fully isolated and dedicated environment for securely running App Service apps at high scale
 
 # <ins> [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/)
 
@@ -368,6 +383,7 @@ https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindin
 
 ## Notes 
 * Function App name needs to be unique across azure
+* If you want to restrict a function app from being accessed by the Internet, then don't use an HTTP trigger. If you need an HTTP trigger, you can restrict who calls it by IP address.
 
 ## Additional Resources
 
@@ -382,6 +398,20 @@ Durable Functions is an extension of Azure Functions that lets you write statefu
 ## Asynchronous API Pattern
 ## Monitor Pattern
 ## Human Interaction Pattern
+
+# <ins>[Azure Batch](https://docs.microsoft.com/en-us/azure/batch/)
+Azure Batch runs large-scale applications efficiently in the cloud. Schedule compute-intensive tasks and dynamically adjust resources for your solution without managing infrastructure.
+
+## CLI
+
+```
+az batch account create \
+    --name mybatchaccount \
+    --storage-account mystorageaccount \
+    --resource-group QuickstartBatch-rg \
+    --location eastus2
+```
+
 
 # <ins> [Choosing an Azure Compute Service](https://docs.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree)
 
@@ -417,6 +447,10 @@ An Azure storage account contains all of your Azure Storage data objects: blobs,
 
 ## Replication
 
+## Notes
+* Storage accounts are access by keys. Using SAS will let them have very granular access without exposing any other part of your storage account.
+* The main reason for creating separate storage accounts is when you are having a lot of IO operations per second.
+
 # <ins> [CosomosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
 Azure Cosmos DB is a fully managed NoSQL database for modern app development. Single-digit millisecond response times, and automatic and instant scalability, guarantee speed at any scale. Business continuity is assured with SLA-backed availability and enterprise-grade security. App development is faster and more productive thanks to turnkey multi region data distribution anywhere in the world, open source APIs and SDKs for popular languages. As a fully managed service, Azure Cosmos DB takes database administration off your hands with automatic management, updates and patching. It also handles capacity management with cost-effective serverless and automatic scaling options that respond to application needs to match capacity with demand.
 
@@ -439,10 +473,27 @@ Your container will require more than a few physical partitions when either of t
 Determine scenarios that warrant a particlulary consistency 
 
 ## Change Feed
+
+## Notes
+
+* Maximum storage per container	Unlimited
+
 # <ins> [SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/)
 
 ## Geo-Replication
 
+## Elastic Database Pool
+
+## Notes
+* ATP (Advanced Threat Protection) will detect attempts to hack your SQL Database.
+* SQL Server uses port 1433 by default, unless you change it.
+* Elastic pools share resources between all of the databases within it. But if all the databases have usage spikes at the same time, you're not getting the benefit of pooling them.
+* The Always Encrypted feature, which requires a special client library, will ensure the data is encrypted at the client site and never decrypted inside Azure.
+
+# <ins> [Table Storage](https://docs.microsoft.com/en-us/azure/storage/tables/)
+Azure Table storage is a service that stores non-relational structured data (also known as structured NoSQL data) in the cloud, providing a key/attribute store with a schemaless design. Because Table storage is schemaless, it's easy to adapt your data as the needs of your application evolve. Access to Table storage data is fast and cost-effective for many types of applications, and is typically lower in cost than traditional SQL for similar volumes of data.
+
+* Not as fully featured as sql database or cosmos db but cost effective
 # <ins>[Blob Containers](https://docs.microsoft.com/en-us/azure/storage/blobs/)
 Azure Blob storage is Microsoft's object storage solution for the cloud. Blob storage is optimized for storing massive amounts of unstructured data. Unstructured data is data that doesn't adhere to a particular data model or definition, such as text or binary data.
 
@@ -462,16 +513,20 @@ Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and acce
 * Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization
 ## Multi-Factor Authentication
 
+## [Priviledged Identity Management](https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/)
+Privileged Identity Management (PIM) is a service in Azure Active Directory (Azure AD) that enables you to manage, control, and monitor access to important resources in your organization. These resources include resources in Azure AD, Azure, and other Microsoft Online Services such as Microsoft 365 or Microsoft Intune.
+
 # <ins> [Azure Access Control](https://docs.microsoft.com/en-us/azure/role-based-access-control/)
 
 Azure role-based access control (Azure RBAC) is a system that provides fine-grained access management of Azure resources. Using Azure RBAC, you can segregate duties within your team and grant only the amount of access to users that they need to perform their jobs.
 
+* The owner of a resource can grant access to it to others. The contributor can control the resource but not give access to it to others.
 ## Shared Access Signature
 A shared access signature (SAS) is a URI that grants restricted access rights to Azure Storage resources. You can provide a shared access signature to clients who should not be trusted with your storage account key but to whom you wish to delegate access to certain storage account resources. By distributing a shared access signature URI to these clients, you can grant them access to a resource for a specified period of time, with a specified set of permissions.
 
 The URI query parameters comprising the SAS token incorporate all of the information necessary to grant controlled access to a storage resource. A client who is in possession of the SAS can make a request against Azure Storage with just the SAS URI, and the information contained in the SAS token is used to authorize the request.
 
-# <ins>[Secure Data]()
+# <ins>Secure Data
 
 ## [Azure Key Vault](https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references)
 
@@ -487,7 +542,12 @@ The scale settings take only seconds to apply and affect all apps in your App Se
 ## Manual Scalling of Azure App Service
 ## Automatic Scalling of Azure App Service
 
-## Virtual Machine Scale Sets
+# <ins> [Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/)
+Azure virtual machine scale sets let you create and manage a group of load balanced VMs. The number of VM instances can automatically increase or decrease in response to demand or a defined schedule. Scale sets provide high availability to your applications, and allow you to centrally manage, configure, and update a large number of VMs. With virtual machine scale sets, you can build large-scale services for areas such as compute, big data, and container workloads.
+
+## Notes
+* maximum number of virtual machines 1000
+
 
 # <ins> [Redis Cache](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/)
 Azure Cache for Redis provides an in-memory data store based on the Redis software. Redis improves the performance and scalability of an application that uses backend data stores heavily. It's able to process large volumes of application requests by keeping frequently accessed data in the server memory, which can be written to and read from quickly. Redis brings a critical low-latency and high-throughput data storage solution to modern applications.
@@ -496,27 +556,70 @@ Azure Cache for Redis offers both the Redis open-source (OSS Redis) and a commer
 
 Azure Cache for Redis can be used as a distributed data or content cache, a session store, a message broker, and more. It can be deployed as a standalone. Or, it can be deployed along with other Azure database services, such as Azure SQL or Cosmos DB.
 
+Azure Cache for Redis offers Redis cluster as implemented in Redis. With Redis Cluster, you get the following benefits:
+
+* The ability to automatically split your dataset among multiple nodes.
+* The ability to continue operations when a subset of the nodes is experiencing failures or are unable to communicate with the rest of the cluster.
+* More throughput: Throughput increases linearly as you increase the number of shards.
+* More memory size: Increases linearly as you increase the number of shards.
+
 # <ins> [CDN](https://docs.microsoft.com/en-us/azure/cdn/)
 Azure Content Delivery Network (CDN) is a global CDN solution for delivering high-bandwidth content. It can be hosted in Azure or any other location. With Azure CDN, you can cache static objects loaded from Azure Blob storage, a web application, or any publicly accessible web server, by using the closest point of presence (POP) server. Azure CDN can also accelerate dynamic content, which cannot be cached, by leveraging various network and routing optimizations.
 
-# <ins> [Monitoring and Logging]()
-
-## Azure Monitor
+## Notes
+* CDN can read the HTML as it passes through and automatically fetch the next files to be delivered without the client needing to ask.
+# [Azure Monitor]()
 Azure Monitor helps you maximize the availability and performance of your applications and services. It delivers a comprehensive solution for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments. This information helps you understand how your applications are performing and proactively identify issues affecting them and the resources they depend on.
 
 The following diagram gives a high-level view of Azure Monitor. At the center of the diagram are the data stores for metrics and logs, which are the two fundamental types of data used by Azure Monitor. On the left are the sources of monitoring data that populate these data stores. On the right are the different functions that Azure Monitor performs with this collected data. This includes such actions as analysis, alerting, and streaming to external systems.
 
 ![](azm-overview.png)
 
-# <ins>Consuming Azure Services
-
-## [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
+# Notes
+* Data Collector API is designed for you to create your own data inputs into Azure Monitor
+# <ins> [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
 Azure Cognitive Search (formerly known as "Azure Search") is a cloud search service that gives developers infrastructure, APIs, and tools for building a rich search experience over private, heterogeneous content in web, mobile, and enterprise applications.
-## API Management
+
+# Notes
+* Azure Search supports multiple data sources
+
+# <ins> [Azure Service Health](https://docs.microsoft.com/en-us/azure/service-health/)
+Azure Service Health is a suite of experiences that provide personalized guidance and support when issues in Azure services are or may affect you in the future. Azure Service Health is composed of Azure status, the service health service, and Resource Health.
+# Notes
+* Azure Service Health will monitor the health of the entire Azure platform and let you create alerts if something is happening that can affect you.
+
+# <ins> [API Management](https://docs.microsoft.com/en-us/azure/api-management/)
+
+
+## Notes
+Policies allow you to modify the inbound request as well as the outbound results without modifying the API code itself.
+
+The API Gateway outbound policy allows you to change the output headers before sending to the client
 
 ## Swagger/API
 
-## Event Grid and Event Hub
+# [Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/)
+Azure Event Grid allows you to easily build applications with event-based architectures. First, select the Azure resource you would like to subscribe to, and then give the event handler or WebHook endpoint to send the event to. Event Grid has built-in support for events coming from Azure services, like storage blobs and resource groups. Event Grid also has support for your own events, using custom topics.
+
+# [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
+Azure Event Hubs is a big data streaming platform and event ingestion service. It can receive and process millions of events per second. Data sent to an event hub can be transformed and stored by using any real-time analytics provider or batching/storage adapters.
+
+The throughput capacity of Event Hubs is controlled by throughput units. Throughput units are pre-purchased units of capacity. A single throughput lets you:
+
+* Ingress: Up to 1 MB per second or 1000 events per second (whichever comes first).
+* Egress: Up to 2 MB per second or 4096 events per second.
+
+# [Azure Storage Queues](https://docs.microsoft.com/en-us/azure/storage/queues/)
+Azure Queue Storage is a service for storing large numbers of messages. You access messages from anywhere in the world via authenticated calls using HTTP or HTTPS. A queue message can be up to 64 KB in size. A queue may contain millions of messages, up to the total capacity limit of a storage account. Queues are commonly used to create a backlog of work to process asynchronously.
+# [Service Bus Queue](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
+Azure Service Bus is a fully managed enterprise message broker with message queues and publish-subscribe topics (in a namespace). Service Bus is used to decouple applications and services from each other, providing the following benefits:
+
+* Load-balancing work across competing workers
+* Safely routing and transferring data and control across service and application boundaries
+* Coordinating transactional work that requires a high-degree of reliability
+
+## Notes
+* Service Bus Queue is enterprise-grade message queue.
 # <ins>Glossary
 
 
