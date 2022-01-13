@@ -595,24 +595,24 @@ To programmatically cache application content in ASP.NET, follow these steps:
 3. Optionally, specify a cache expiration time by calling SetExpires to set a value for the Expires header. Otherwise, the default cache heuristics described previously in this document apply.
 ## Notes
 * CDN can read the HTML as it passes through and automatically fetch the next files to be delivered without the client needing to ask.
-# [Azure Monitor]()
+# <ins> [Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/)
 Azure Monitor helps you maximize the availability and performance of your applications and services. It delivers a comprehensive solution for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments. This information helps you understand how your applications are performing and proactively identify issues affecting them and the resources they depend on.
 
 The following diagram gives a high-level view of Azure Monitor. At the center of the diagram are the data stores for metrics and logs, which are the two fundamental types of data used by Azure Monitor. On the left are the sources of monitoring data that populate these data stores. On the right are the different functions that Azure Monitor performs with this collected data. This includes such actions as analysis, alerting, and streaming to external systems.
 
 ![](azm-overview.png)
 
-# Notes
+## Notes
 * Data Collector API is designed for you to create your own data inputs into Azure Monitor
 # <ins> [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
 Azure Cognitive Search (formerly known as "Azure Search") is a cloud search service that gives developers infrastructure, APIs, and tools for building a rich search experience over private, heterogeneous content in web, mobile, and enterprise applications.
 
-# Notes
+## Notes
 * Azure Search supports multiple data sources
 
 # <ins> [Azure Service Health](https://docs.microsoft.com/en-us/azure/service-health/)
 Azure Service Health is a suite of experiences that provide personalized guidance and support when issues in Azure services are or may affect you in the future. Azure Service Health is composed of Azure status, the service health service, and Resource Health.
-# Notes
+## Notes
 * Azure Service Health will monitor the health of the entire Azure platform and let you create alerts if something is happening that can affect you.
 
 # <ins> [API Management](https://docs.microsoft.com/en-us/azure/api-management/)
@@ -625,10 +625,10 @@ The API Gateway outbound policy allows you to change the output headers before s
 
 ## Swagger/API
 
-# [Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/)
+# <ins> [Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/)
 Azure Event Grid allows you to easily build applications with event-based architectures. First, select the Azure resource you would like to subscribe to, and then give the event handler or WebHook endpoint to send the event to. Event Grid has built-in support for events coming from Azure services, like storage blobs and resource groups. Event Grid also has support for your own events, using custom topics.
 
-# [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
+# <ins> [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 Azure Event Hubs is a big data streaming platform and event ingestion service. It can receive and process millions of events per second. Data sent to an event hub can be transformed and stored by using any real-time analytics provider or batching/storage adapters.
 
 The throughput capacity of Event Hubs is controlled by throughput units. Throughput units are pre-purchased units of capacity. A single throughput lets you:
@@ -636,9 +636,9 @@ The throughput capacity of Event Hubs is controlled by throughput units. Through
 * Ingress: Up to 1 MB per second or 1000 events per second (whichever comes first).
 * Egress: Up to 2 MB per second or 4096 events per second.
 
-# [Azure Storage Queues](https://docs.microsoft.com/en-us/azure/storage/queues/)
+# <ins> [Azure Storage Queues](https://docs.microsoft.com/en-us/azure/storage/queues/)
 Azure Queue Storage is a service for storing large numbers of messages. You access messages from anywhere in the world via authenticated calls using HTTP or HTTPS. A queue message can be up to 64 KB in size. A queue may contain millions of messages, up to the total capacity limit of a storage account. Queues are commonly used to create a backlog of work to process asynchronously.
-# [Service Bus Queue](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
+# <ins> [Service Bus Queue](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
 Azure Service Bus is a fully managed enterprise message broker with message queues and publish-subscribe topics (in a namespace). Service Bus is used to decouple applications and services from each other, providing the following benefits:
 
 * Load-balancing work across competing workers
