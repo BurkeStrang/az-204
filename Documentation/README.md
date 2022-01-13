@@ -321,6 +321,11 @@ Azure App Service enables you to build and host web apps, mobile back ends, and 
 Spend time reading through the different plans and think about what features are available in each e.g. can auto scale on the standard plan but not the basic.
 https://azure.microsoft.com/en-us/pricing/details/app-service/windows/
 
+## CLI
+
+## Pwsh
+
+
 ## DNS
 You can configure Azure DNS to host a custom domain for your web apps. For example, you can create an Azure web app and have your users access it using either www.contoso.com or contoso.com as a fully qualified domain name (FQDN).
 
@@ -505,6 +510,13 @@ Blob storage is designed for:
 * Writing to log files.
 * Storing data for backup and restore, disaster recovery, and archiving.
 * Storing data for analysis by an on-premises or Azure-hosted service.
+
+##Blobs
+Azure Storage supports three types of blobs:
+
+* **Block blobs** store text and binary data. Block blobs are made up of blocks of data that can be managed individually. Block blobs can store up to about 190.7 TiB.
+* **Append blobs** are made up of blocks like block blobs, but are optimized for append operations. Append blobs are ideal for scenarios such as logging data from virtual machines.
+* **Page blobs** store random access files up to 8 TiB in size. Page blobs store virtual hard drive (VHD) files and serve as disks for Azure virtual machines. For more information about page blobs, see Overview of Azure page blobs
 # <ins>[Azure Authentication](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/)
 Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and access management service, which helps your employees sign in and access resources in:
 
@@ -521,6 +533,14 @@ Privileged Identity Management (PIM) is a service in Azure Active Directory (Azu
 Azure role-based access control (Azure RBAC) is a system that provides fine-grained access management of Azure resources. Using Azure RBAC, you can segregate duties within your team and grant only the amount of access to users that they need to perform their jobs.
 
 * The owner of a resource can grant access to it to others. The contributor can control the resource but not give access to it to others.
+
+## CLI
+
+## Pwsh
+Use the New-AzRoleAssignment command to grant access:
+```
+New-AzRoleAssignment -ResourceGroupName rg1 -SignInName allen.young@live.com -RoleDefinitionName Reader -AllowDelegation
+```
 ## Shared Access Signature
 A shared access signature (SAS) is a URI that grants restricted access rights to Azure Storage resources. You can provide a shared access signature to clients who should not be trusted with your storage account key but to whom you wish to delegate access to certain storage account resources. By distributing a shared access signature URI to these clients, you can grant them access to a resource for a specified period of time, with a specified set of permissions.
 
@@ -566,6 +586,13 @@ Azure Cache for Redis offers Redis cluster as implemented in Redis. With Redis C
 # <ins> [CDN](https://docs.microsoft.com/en-us/azure/cdn/)
 Azure Content Delivery Network (CDN) is a global CDN solution for delivering high-bandwidth content. It can be hosted in Azure or any other location. With Azure CDN, you can cache static objects loaded from Azure Blob storage, a web application, or any publicly accessible web server, by using the closest point of presence (POP) server. Azure CDN can also accelerate dynamic content, which cannot be cached, by leveraging various network and routing optimizations.
 
+To programmatically cache application content in ASP.NET, follow these steps:
+
+1. Verify that the content is marked as cacheable by setting HttpCacheability to Public.
+2. Set a cache validator by calling one of the following HttpCachePolicy methods:
+* Call SetLastModified to set a timestamp value for the Last-Modified header.
+* Call SetETag to set a value for the ETag header.
+3. Optionally, specify a cache expiration time by calling SetExpires to set a value for the Expires header. Otherwise, the default cache heuristics described previously in this document apply.
 ## Notes
 * CDN can read the HTML as it passes through and automatically fetch the next files to be delivered without the client needing to ask.
 # [Azure Monitor]()
