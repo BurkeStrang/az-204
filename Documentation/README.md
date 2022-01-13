@@ -354,7 +354,7 @@ The Azure App Service Environment is an Azure App Service feature that provides 
 
 Azure Functions is a serverless solution that allows you to write less code, maintain less infrastructure, and save on costs. Instead of worrying about deploying and maintaining servers, the cloud infrastructure provides all the up-to-date resources needed to keep your applications running.
 
-##Triggers and Bindings
+## Triggers and Bindings
 
 Triggers are what cause a function to run. A trigger defines how a function is invoked and a function must have exactly one trigger. Triggers have associated data, which is often provided as the payload of the function.
 
