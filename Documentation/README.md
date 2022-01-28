@@ -321,6 +321,12 @@ Azure App Service enables you to build and host web apps, mobile back ends, and 
 Spend time reading through the different plans and think about what features are available in each e.g. can auto scale on the standard plan but not the basic.
 https://azure.microsoft.com/en-us/pricing/details/app-service/windows/
 
+## Access client certificate
+In App Service, TLS termination of the request happens at the frontend load balancer. When forwarding the request to your app code with client certificates enabled, App Service injects an X-ARR-ClientCert request header with the client certificate. App Service does not do anything with this client certificate other than forwarding it to your app. Your app code is responsible for validating the client certificate.
+
+For ASP.NET, the client certificate is available through the HttpRequest.ClientCertificate property.
+
+For other application stacks (Node.js, PHP, etc.), the client cert is available in your app through a base64 encoded value in the X-ARR-ClientCert request header.
 ## CLI
 
 ## Pwsh
@@ -477,6 +483,14 @@ Your container will require more than a few physical partitions when either of t
 ## Data Consistency
 Determine scenarios that warrant a particlulary consistency 
 
+Azure Cosmos DB offers five well-defined levels. From strongest to weakest, the levels are:
+
+* Strong
+* Bounded staleness
+* Session
+* Consistent prefix
+* Eventual
+* Each level provid
 ## Change Feed
 
 ## Notes
@@ -511,12 +525,18 @@ Blob storage is designed for:
 * Storing data for backup and restore, disaster recovery, and archiving.
 * Storing data for analysis by an on-premises or Azure-hosted service.
 
-##Blobs
+## Blobs
 Azure Storage supports three types of blobs:
 
 * **Block blobs** store text and binary data. Block blobs are made up of blocks of data that can be managed individually. Block blobs can store up to about 190.7 TiB.
 * **Append blobs** are made up of blocks like block blobs, but are optimized for append operations. Append blobs are ideal for scenarios such as logging data from virtual machines.
 * **Page blobs** store random access files up to 8 TiB in size. Page blobs store virtual hard drive (VHD) files and serve as disks for Azure virtual machines. For more information about page blobs, see Overview of Azure page blobs
+
+## Lease Blob
+The Lease Blob operation creates and manages a lock on a blob for write and delete operations. The lock duration can be 15 to 60 seconds, or can be infinite. In versions prior to 2012-02-12, the lock duration is 60 seconds.
+
+## Put Blob
+The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob.
 # <ins>[Azure Authentication](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/)
 Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and access management service, which helps your employees sign in and access resources in:
 
@@ -602,6 +622,13 @@ The following diagram gives a high-level view of Azure Monitor. At the center of
 
 ![](azm-overview.png)
 
+## Usage
+* **Users** - Find out when people use your web app, what pages they're most interested in, where your users are located, and what browsers and operating systems they use.
+* **Funnels** - The progression through a series of steps in a web application.
+* **Cohrots** - 
+
+
+
 ## Notes
 * Data Collector API is designed for you to create your own data inputs into Azure Monitor
 # <ins> [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
@@ -617,6 +644,23 @@ Azure Service Health is a suite of experiences that provide personalized guidanc
 
 # <ins> [API Management](https://docs.microsoft.com/en-us/azure/api-management/)
 
+## Throttling
+Rate limits are usually used to protect against short and intense volume bursts. For example, if you know your backend service has a bottleneck at its database with a high call volume, you could set a rate-limit-by-key policy to not allow high call volume by using this setting.
+
+Quotas are usually used for controlling call rates over a longer period of time. For example, they can set the total number of calls that a particular subscriber can make within a given month. For monetizing your API, quotas can also be set differently for tier-based subscriptions. For example, a Basic tier subscription might be able to make no more than 10,000 calls a month but a Premium tier could go up to 100,000,000 calls each month.
+
+Within Azure API Management, rate limits are typically propagated faster across the nodes to protect against spikes. In contrast, usage quota information is used over a longer term and hence its implementation is different.
+
+```
+<rate-limit-by-key  calls="10"
+          renewal-period="60"
+          counter-key="@(context.Request.IpAddress)" />
+
+<quota-by-key calls="1000000"
+          bandwidth="10000"
+          renewal-period="2629800"
+          counter-key="@(context.Request.IpAddress)" />
+```
 
 ## Notes
 Policies allow you to modify the inbound request as well as the outbound results without modifying the API code itself.
@@ -647,6 +691,9 @@ Azure Service Bus is a fully managed enterprise message broker with message queu
 
 ## Notes
 * Service Bus Queue is enterprise-grade message queue.
+
+# <ins> [Azure Nofitifaction Hubs](https://docs.microsoft.com/en-us/azure/notification-hubs/)
+Azure Notification Hubs provide an easy-to-use and scaled-out push engine that enables you to send notifications to any platform (iOS, Android, Windows, etc.) from any back-end (cloud or on-premises). Notification Hubs works great for both enterprise and consumer scenarios. Here are a few example scenarios:
 # <ins>Glossary
 
 
