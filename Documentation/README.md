@@ -356,6 +356,14 @@ https://www.youtube.com/watch?v=4BwyqmRTrx8&t=46s
 # <ins> [App Service Environment](https://docs.microsoft.com/en-us/azure/app-service/environment/)
 The Azure App Service Environment is an Azure App Service feature that provides a fully isolated and dedicated environment for securely running App Service apps at high scale
 
+When you create a function app in Azure, you must choose a hosting plan for your app. There are three basic hosting plans available for Azure Functions: Consumption plan, Functions Premium plan, and App service (Dedicated) plan. All hosting plans are generally available (GA) on both Linux and Windows virtual machines.
+
+The hosting plan you choose dictates the following behaviors:
+
+* How your function app is scaled.
+* The resources available to each function app instance.
+* Support for advanced functionality, such as Azure Virtual Network connectivity.
+
 # <ins> [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/)
 
 Azure Functions is a serverless solution that allows you to write less code, maintain less infrastructure, and save on costs. Instead of worrying about deploying and maintaining servers, the cloud infrastructure provides all the up-to-date resources needed to keep your applications running.
@@ -405,10 +413,121 @@ https://www.youtube.com/watch?v=zIfxkub7CLY
 Durable Functions is an extension of Azure Functions that lets you write stateful functions in a serverless compute environment. The extension lets you define stateful workflows by writing orchestrator functions and stateful entities by writing entity functions using the Azure Functions programming model. Behind the scenes, the extension manages state, checkpoints, and restarts for you, allowing you to focus on your business logic.
 
 ## Function Chaining Pattern
+```
+[FunctionName("Chaining")]
+public static async Task<object> Run(
+    [OrchestrationTrigger] IDurableOrchestrationContext context)
+{
+    try
+    {
+        var x = await context.CallActivityAsync<object>("F1", null);
+        var y = await context.CallActivityAsync<object>("F2", x);
+        var z = await context.CallActivityAsync<object>("F3", y);
+        return  await context.CallActivityAsync<object>("F4", z);
+    }
+    catch (Exception)
+    {
+        // Error handling or compensation goes here.
+    }
+}
+```
 ## Fan Out/ Fan In Pattern
+```
+[FunctionName("FanOutFanIn")]
+public static async Task Run(
+    [OrchestrationTrigger] IDurableOrchestrationContext context)
+{
+    var parallelTasks = new List<Task<int>>();
+
+    // Get a list of N work items to process in parallel.
+    object[] workBatch = await context.CallActivityAsync<object[]>("F1", null);
+    for (int i = 0; i < workBatch.Length; i++)
+    {
+        Task<int> task = context.CallActivityAsync<int>("F2", workBatch[i]);
+        parallelTasks.Add(task);
+    }
+
+    await Task.WhenAll(parallelTasks);
+
+    // Aggregate all N outputs and send the result to F3.
+    int sum = parallelTasks.Sum(t => t.Result);
+    await context.CallActivityAsync("F3", sum);
+}
+```
 ## Asynchronous API Pattern
+```
+public static class HttpStart
+{
+    [FunctionName("HttpStart")]
+    public static async Task<HttpResponseMessage> Run(
+        [HttpTrigger(AuthorizationLevel.Function, methods: "post", Route = "orchestrators/{functionName}")] HttpRequestMessage req,
+        [DurableClient] IDurableClient starter,
+        string functionName,
+        ILogger log)
+    {
+        // Function input comes from the request content.
+        object eventData = await req.Content.ReadAsAsync<object>();
+        string instanceId = await starter.StartNewAsync(functionName, eventData);
+
+        log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
+
+        return starter.CreateCheckStatusResponse(req, instanceId);
+    }
+}
+```
 ## Monitor Pattern
+```
+[FunctionName("MonitorJobStatus")]
+public static async Task Run(
+    [OrchestrationTrigger] IDurableOrchestrationContext context)
+{
+    int jobId = context.GetInput<int>();
+    int pollingInterval = GetPollingInterval();
+    DateTime expiryTime = GetExpiryTime();
+
+    while (context.CurrentUtcDateTime < expiryTime)
+    {
+        var jobStatus = await context.CallActivityAsync<string>("GetJobStatus", jobId);
+        if (jobStatus == "Completed")
+        {
+            // Perform an action when a condition is met.
+            await context.CallActivityAsync("SendAlert", machineId);
+            break;
+        }
+
+        // Orchestration sleeps until this time.
+        var nextCheck = context.CurrentUtcDateTime.AddSeconds(pollingInterval);
+        await context.CreateTimer(nextCheck, CancellationToken.None);
+    }
+
+    // Perform more work here, or let the orchestration end.
+}
+```
 ## Human Interaction Pattern
+```
+[FunctionName("ApprovalWorkflow")]
+public static async Task Run(
+    [OrchestrationTrigger] IDurableOrchestrationContext context)
+{
+    await context.CallActivityAsync("RequestApproval", null);
+    using (var timeoutCts = new CancellationTokenSource())
+    {
+        DateTime dueTime = context.CurrentUtcDateTime.AddHours(72);
+        Task durableTimeout = context.CreateTimer(dueTime, timeoutCts.Token);
+
+        Task<bool> approvalEvent = context.WaitForExternalEvent<bool>("ApprovalEvent");
+        if (approvalEvent == await Task.WhenAny(approvalEvent, durableTimeout))
+        {
+            timeoutCts.Cancel();
+            await context.CallActivityAsync("ProcessApproval", approvalEvent.Result);
+        }
+        else
+        {
+            await context.CallActivityAsync("Escalate", null);
+        }
+    }
+}
+```
 
 # <ins>[Azure Batch](https://docs.microsoft.com/en-us/azure/batch/)
 Azure Batch runs large-scale applications efficiently in the cloud. Schedule compute-intensive tasks and dynamically adjust resources for your solution without managing infrastructure.
@@ -543,6 +662,8 @@ Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and acce
 * External resources, such as Microsoft 365, the Azure portal, and thousands of other SaaS applications.
 
 * Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization
+
+## [Manage Indentities](https://docs.microsoft.com/en-gb/azure/active-directory/managed-identities-azure-resources/)
 ## Multi-Factor Authentication
 
 ## [Priviledged Identity Management](https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/)
@@ -581,6 +702,30 @@ The scale settings take only seconds to apply and affect all apps in your App Se
 
 ## Manual Scalling of Azure App Service
 ## Automatic Scalling of Azure App Service
+
+### Metrics for autoscale rules
+Autoscaling by metric requires that you define one or more autoscale rules. An autoscale rule specifies a metric to monitor, and how autoscaling should respond when this metric crosses a defined threshold. The metrics you can monitor for a web app are:
+
+* CPU Percentage. This metric is an indication of the CPU utilization across all instances. A high value shows that instances are becoming CPU-bound, which could cause delays in processing client requests.
+* Memory Percentage. This metric captures the memory occupancy of the application across all instances. A high value indicates that free memory could be running low, and could cause one or more instances to fail.
+* Disk Queue Length. This metric is a measure of the number of outstanding I/O requests across all instances. A high value means that disk contention could be occurring.
+* Http Queue Length. This metric shows how many client requests are waiting for processing by the web app. If this number is large, client requests might fail with HTTP 408 (Timeout) errors.
+Data In. This metric is the number of bytes received across all instances.
+* Data Out. This metric is the number of bytes sent by all instances.
+
+You can also scale based on metrics for other Azure services. For example, if the web app processes requests received from a Service Bus Queue, you might want to spin up additional instances of a web app if the number of items held in an Azure Service Bus Queue exceeds a critical length.
+
+We recommend choosing an adequate margin between the scale-out and in thresholds. As an example, consider the following better rule combination.
+
+* Increase instances by 1 count when CPU% >= 80
+* Decrease instances by 1 count when CPU% <= 60
+In this case
+
+1. Assume there are 2 instances to start with.
+2. If the average CPU% across instances goes to 80, autoscale scales out adding a third instance.
+3. Now assume that over time the CPU% falls to 60.
+4. Autoscale's scale-in rule estimates the final state if it were to scale-in. For example, 60 x 3 (current instance count) = 180 / 2 (final number of instances when scaled in) = 90. So autoscale does not scale-in because it would have to scale-out again immediately. Instead, it skips scaling in.
+5. The next time autoscale checks, the CPU continues to fall to 50. It estimates again - 50 x 3 instance = 150 / 2 instances = 75, which is below the scale-out threshold of 80, so it scales in successfully to 2 instances.
 
 # <ins> [Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/)
 Azure virtual machine scale sets let you create and manage a group of load balanced VMs. The number of VM instances can automatically increase or decrease in response to demand or a defined schedule. Scale sets provide high availability to your applications, and allow you to centrally manage, configure, and update a large number of VMs. With virtual machine scale sets, you can build large-scale services for areas such as compute, big data, and container workloads.
