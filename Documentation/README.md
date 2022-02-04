@@ -664,6 +664,15 @@ Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and acce
 * Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization
 
 ## [Manage Indentities](https://docs.microsoft.com/en-gb/azure/active-directory/managed-identities-azure-resources/)
+
+## Service principal
+There are three types of service principal:
+
+* Application - The type of service principal is the local representation, or application instance, of a global application object in a single tenant or directory. A service principal is created in each tenant where the application is used and references the globally unique app object. The service principal object defines what the app can actually do in the specific tenant, who can access the app, and what resources the app can access.
+
+* Managed identity - This type of service principal is used to represent a managed identity. Managed identities provide an identity for applications to use when connecting to resources that support Azure Active Directory authentication. When a managed identity is enabled, a service principal representing that managed identity is created in your tenant. Service principals representing managed identities can be granted access and permissions, but cannot be updated or modified directly.
+
+* Legacy - This type of service principal represents a legacy app, which is an app created before app registrations were introduced or an app created through legacy experiences. A legacy service principal can have credentials, service principal names, reply URLs, and other properties that an authorized user can edit, but does not have an associated app registration. The service principal can only be used in the tenant where it was created.
 ## Multi-Factor Authentication
 
 ## [Priviledged Identity Management](https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/)
@@ -766,6 +775,15 @@ Azure Monitor helps you maximize the availability and performance of your applic
 The following diagram gives a high-level view of Azure Monitor. At the center of the diagram are the data stores for metrics and logs, which are the two fundamental types of data used by Azure Monitor. On the left are the sources of monitoring data that populate these data stores. On the right are the different functions that Azure Monitor performs with this collected data. This includes such actions as analysis, alerting, and streaming to external systems.
 
 ![](azm-overview.png)
+
+## Application Insights
+
+You can create up to 100 availability tests per Application Insights resource, and there are three types of availability tests:
+
+* URL ping test (classic): You can create this simple test through the portal to validate whether an endpoint is responding and measure performance associated with that response. You can also set custom success criteria coupled with more advanced features, like parsing dependent requests and allowing for retries.
+* Standard test (Preview): This single request test is similar to the URL ping test. It includes SSL certificate validity, proactive lifetime check, HTTP request verb (for example GET, HEAD, or POST), custom headers, and custom data associated with your HTTP request.
+* Custom TrackAvailability test: If you decide to create a custom application to run availability tests, you can use the TrackAvailability() method to send the results to Application Insights. Is recommended for authentication tests.
+
 
 ## Usage
 * **Users** - Find out when people use your web app, what pages they're most interested in, where your users are located, and what browsers and operating systems they use.
