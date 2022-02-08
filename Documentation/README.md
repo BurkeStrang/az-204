@@ -610,6 +610,8 @@ Azure Cosmos DB offers five well-defined levels. From strongest to weakest, the 
 * Consistent prefix
 * Eventual
 * Each level provid
+
+![](five-consistency-levels.png)
 ## Change Feed
 
 ## Notes
