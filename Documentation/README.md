@@ -866,6 +866,8 @@ The API Gateway outbound policy allows you to change the output headers before s
 # <ins> [Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/)
 Azure Event Grid allows you to easily build applications with event-based architectures. First, select the Azure resource you would like to subscribe to, and then give the event handler or WebHook endpoint to send the event to. Event Grid has built-in support for events coming from Azure services, like storage blobs and resource groups. Event Grid also has support for your own events, using custom topics.
 
+![](event-grid-model.png)
+
 ## Additional Resources
 
 https://www.youtube.com/watch?v=TujzkSxJzIA
