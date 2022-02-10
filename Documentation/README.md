@@ -785,6 +785,9 @@ Azure Cache for Redis offers Redis cluster as implemented in Redis. With Redis C
 * More throughput: Throughput increases linearly as you increase the number of shards.
 * More memory size: Increases linearly as you increase the number of shards.
 
+## Additional resouces
+https://www.youtube.com/watch?v=K7_gnzge6Oc
+
 # <ins> [CDN](https://docs.microsoft.com/en-us/azure/cdn/)
 Azure Content Delivery Network (CDN) is a global CDN solution for delivering high-bandwidth content. It can be hosted in Azure or any other location. With Azure CDN, you can cache static objects loaded from Azure Blob storage, a web application, or any publicly accessible web server, by using the closest point of presence (POP) server. Azure CDN can also accelerate dynamic content, which cannot be cached, by leveraging various network and routing optimizations.
 
@@ -862,6 +865,10 @@ The API Gateway outbound policy allows you to change the output headers before s
 
 # <ins> [Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/)
 Azure Event Grid allows you to easily build applications with event-based architectures. First, select the Azure resource you would like to subscribe to, and then give the event handler or WebHook endpoint to send the event to. Event Grid has built-in support for events coming from Azure services, like storage blobs and resource groups. Event Grid also has support for your own events, using custom topics.
+
+## Additional Resources
+
+https://www.youtube.com/watch?v=TujzkSxJzIA
 
 # <ins> [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 Azure Event Hubs is a big data streaming platform and event ingestion service. It can receive and process millions of events per second. Data sent to an event hub can be transformed and stored by using any real-time analytics provider or batching/storage adapters.
