@@ -674,6 +674,21 @@ Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and acce
 
 ## Microsoft Graph
 
+```
+{HTTP method} https://graph.microsoft.com/{version}/{resource}?{query-parameters}
+```
+
+**Get the photo**
+```
+GET /me/photo/$value
+GET /users/{id | userPrincipalName}/photo/$value
+GET /groups/{id}/photo/$value
+GET /me/contacts/{id}/photo/$value
+GET /users/{id | userPrincipalName}/contacts/{id}/photo/$value
+GET /me/contactfolders/{contactFolderId}/contacts/{id}/photo/$value
+GET /users/{id | userPrincipalName}/contactfolders/{contactFolderId}/contacts/{id}/photo/$value
+```
+
 ## [Manage Indentities](https://docs.microsoft.com/en-gb/azure/active-directory/managed-identities-azure-resources/)
 
 ## SAS
@@ -685,6 +700,8 @@ User delegation SAS: A user delegation SAS is secured with Azure Active Director
 Service SAS: A service SAS is secured with the storage account key. A service SAS delegates access to a resource in the following Azure Storage services: Blob storage, Queue storage, Table storage, or Azure Files.
 
 Account SAS: An account SAS is secured with the storage account key. An account SAS delegates access to resources in one or more of the storage services. All of the operations available via a service or user delegation SAS are also available via an account SAS.
+
+![](sas-storage-uri.png)
 
 ## Permission types
 The Microsoft identity platform supports two types of permissions: delegated permissions and application permissions.
@@ -785,6 +802,12 @@ Azure Cache for Redis offers Redis cluster as implemented in Redis. With Redis C
 * More throughput: Throughput increases linearly as you increase the number of shards.
 * More memory size: Increases linearly as you increase the number of shards.
 
+## Pwsh
+
+```
+New-AzRedisCache -ResourceGroupName myGroup -Name mycache -Location "North Central US"
+```
+
 ## Additional resouces
 https://www.youtube.com/watch?v=K7_gnzge6Oc
 
@@ -800,6 +823,9 @@ To programmatically cache application content in ASP.NET, follow these steps:
 3. Optionally, specify a cache expiration time by calling SetExpires to set a value for the Expires header. Otherwise, the default cache heuristics described previously in this document apply.
 ## Notes
 * CDN can read the HTML as it passes through and automatically fetch the next files to be delivered without the client needing to ask.
+
+## [Azure Front Door](https://docs.microsoft.com/en-us/azure/frontdoor/)
+Azure Front Door is a global, scalable entry-point that uses the Microsoft global edge network to create fast, secure, and widely scalable web applications. With Front Door, you can transform your global consumer and enterprise applications into robust, high-performing personalized modern applications with contents that reach a global audience through Azure.
 # <ins> [Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/)
 Azure Monitor helps you maximize the availability and performance of your applications and services. It delivers a comprehensive solution for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments. This information helps you understand how your applications are performing and proactively identify issues affecting them and the resources they depend on.
 
@@ -838,6 +864,17 @@ Azure Service Health is a suite of experiences that provide personalized guidanc
 
 # <ins> [API Management](https://docs.microsoft.com/en-us/azure/api-management/)
 
+## CLI
+```
+az group create --name myResourceGroup --location centralus
+az apim create --name myapim --resource-group myResourceGroup \
+  --publisher-name Contoso --publisher-email admin@contoso.com \
+  --no-wait
+```
+Check the status of the deployment by running the az apim show command:
+```
+az apim show --name myapim --resource-group myResourceGroup --output table
+```
 ## Throttling
 Rate limits are usually used to protect against short and intense volume bursts. For example, if you know your backend service has a bottleneck at its database with a high call volume, you could set a rate-limit-by-key policy to not allow high call volume by using this setting.
 
@@ -856,6 +893,33 @@ Within Azure API Management, rate limits are typically propagated faster across 
           counter-key="@(context.Request.IpAddress)" />
 ```
 
+## Policies
+In the following example, the policy only allows requests coming either from the single IP address or range of IP addresses specified
+```
+<ip-filter action="allow">
+    <address>13.66.201.169</address>
+    <address-range from="13.66.140.128" to="13.66.140.143" />
+</ip-filter>
+```
+
+
+In the following example, the rate limit of 10 calls per 60 seconds is keyed by the caller IP address. After each policy execution, the remaining calls allowed in the time period are stored in the variable remainingCallsPerIP.
+```
+<policies>
+    <inbound>
+        <base />
+        <rate-limit-by-key  calls="10"
+              renewal-period="60"
+              increment-condition="@(context.Response.StatusCode == 200)"
+              counter-key="@(context.Request.IpAddress)"
+              remaining-calls-variable-name="remainingCallsPerIP"/>
+    </inbound>
+    <outbound>
+        <base />
+    </outbound>
+</policies>
+```
+
 ## Notes
 Policies allow you to modify the inbound request as well as the outbound results without modifying the API code itself.
 
@@ -866,7 +930,56 @@ The API Gateway outbound policy allows you to change the output headers before s
 # <ins> [Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/)
 Azure Event Grid allows you to easily build applications with event-based architectures. First, select the Azure resource you would like to subscribe to, and then give the event handler or WebHook endpoint to send the event to. Event Grid has built-in support for events coming from Azure services, like storage blobs and resource groups. Event Grid also has support for your own events, using custom topics.
 
+There are five concepts in Azure Event Grid you need to understand to help you get started, and are described in more detail below:
+
+* Events - What happened.
+* Event sources - Where the event took place.
+* Topics - The endpoint where publishers send events.
+* Event subscriptions - The endpoint or built-in mechanism to route events, sometimes to more than one handler. Subscriptions are also used by handlers to intelligently filter incoming events.
+* Event handlers - The app or service reacting to the event.
+
 ![](event-grid-model.png)
+
+## CLI
+```
+let rNum=$RANDOM*$RANDOM
+myLocation=<myLocation>
+myTopicName="az204-egtopic-${rNum}"
+mySiteName="az204-egsite-${rNum}"
+mySiteURL="https://${mySiteName}.azurewebsites.net"
+
+az group create --name az204-evgrid-rg --location $myLocation
+
+az provider register --namespace Microsoft.EventGrid
+
+az provider show --namespace Microsoft.EventGrid --query "registrationState"
+
+az eventgrid topic create --name $myTopicName \
+    --location $myLocation \
+    --resource-group az204-evgrid-rg
+
+az deployment group create \
+    --resource-group az204-evgrid-rg \
+    --template-uri "https://raw.githubusercontent.com/Azure-Samples/azure-event-grid-viewer/main/azuredeploy.json" \
+    --parameters siteName=$mySiteName hostingPlanName=viewerhost
+
+echo "Your web app URL: ${mySiteURL}"
+
+endpoint="${mySiteURL}/api/updates"
+subId=$(az account show --subscription "" | jq -r '.id')
+
+az eventgrid event-subscription create \
+    --source-resource-id "/subscriptions/$subId/resourceGroups/az204-evgrid-rg/providers/Microsoft.EventGrid/topics/$myTopicName" \
+    --name az204ViewerSub \
+    --endpoint $endpoint
+
+topicEndpoint=$(az eventgrid topic show --name $myTopicName -g az204-evgrid-rg --query "endpoint" --output tsv)
+key=$(az eventgrid topic key list --name $myTopicName -g az204-evgrid-rg --query "key1" --output tsv)
+
+event='[ {"id": "'"$RANDOM"'", "eventType": "recordInserted", "subject": "myapp/vehicles/motorcycles", "eventTime": "'`date +%Y-%m-%dT%H:%M:%S%z`'", "data":{ "make": "Contoso", "model": "Monster"},"dataVersion": "1.0"} ]'
+
+curl -X POST -H "aeg-sas-key: $key" -d "$event" $topicEndpoint
+```
 
 ## Additional Resources
 
@@ -875,10 +988,20 @@ https://www.youtube.com/watch?v=TujzkSxJzIA
 # <ins> [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 Azure Event Hubs is a big data streaming platform and event ingestion service. It can receive and process millions of events per second. Data sent to an event hub can be transformed and stored by using any real-time analytics provider or batching/storage adapters.
 
-The throughput capacity of Event Hubs is controlled by throughput units. Throughput units are pre-purchased units of capacity. A single throughput lets you:
+* An **Event Hub client** is the primary interface for developers interacting with the Event Hubs client library. There are several different Event Hub clients, each dedicated to a specific use of Event Hubs, such as publishing or consuming events.
+* An **Event Hub producer** is a type of client that serves as a source of telemetry data, diagnostics information, usage logs, or other log data, as part of an embedded device solution, a mobile device application, a game title running on a console or other device, some client or server based business solution, or a web site.
+* An **Event Hub consumer** is a type of client which reads information from the Event Hub and allows processing of it. Processing may involve aggregation, complex computation and filtering. Processing may also involve distribution or storage of the information in a raw or transformed fashion. Event Hub consumers are often robust and high-scale platform infrastructure parts with built-in analytics capabilities, like Azure Stream Analytics, Apache Spark, or Apache Storm.
+* A **partition** is an ordered sequence of events that is held in an Event Hub. Partitions are a means of data organization associated with the parallelism required by event consumers. Azure Event Hubs provides message streaming through a partitioned consumer pattern in which each consumer only reads a specific subset, or partition, of the message stream. As newer events arrive, they are added to the end of this sequence. The number of partitions is specified at the time an Event Hub is created and cannot be changed.
+* A **consumer group** is a view of an entire Event Hub. Consumer groups enable multiple consuming applications to each have a separate view of the event stream, and to read the stream independently at their own pace and from their own position. There can be at most 5 concurrent readers on a partition per consumer group; however it is recommended that there is only one active consumer for a given partition and consumer group pairing. Each active reader receives all of the events from its partition; if there are multiple readers on the same partition, then they will receive duplicate events.
+* **Event receivers**: Any entity that reads event data from an event hub. All Event Hubs consumers connect via the AMQP 1.0 session. The Event Hubs service delivers events through a session as they become available. All Kafka consumers connect via the Kafka protocol 1.0 and later.
+* **Throughput units or processing units**: Pre-purchased units of capacity that control the throughput capacity of Event Hubs.
+
+A single throughput lets you:
 
 * Ingress: Up to 1 MB per second or 1000 events per second (whichever comes first).
 * Egress: Up to 2 MB per second or 4096 events per second.
+
+![](event-hubs-stream-processing.png)
 
 # <ins> [Azure Storage Queues](https://docs.microsoft.com/en-us/azure/storage/queues/)
 Azure Queue Storage is a service for storing large numbers of messages. You access messages from anywhere in the world via authenticated calls using HTTP or HTTPS. A queue message can be up to 64 KB in size. A queue may contain millions of messages, up to the total capacity limit of a storage account. Queues are commonly used to create a backlog of work to process asynchronously.
