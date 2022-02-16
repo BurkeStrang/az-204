@@ -880,6 +880,9 @@ Rate limits are usually used to protect against short and intense volume bursts.
 
 Quotas are usually used for controlling call rates over a longer period of time. For example, they can set the total number of calls that a particular subscriber can make within a given month. For monetizing your API, quotas can also be set differently for tier-based subscriptions. For example, a Basic tier subscription might be able to make no more than 10,000 calls a month but a Premium tier could go up to 100,000,000 calls each month.
 
+Rates are meant to control peaks. Quotas are meant to control volumes.
+The renewal period for quotas cannot be set to less than 3,600s, or one hour.
+
 Within Azure API Management, rate limits are typically propagated faster across the nodes to protect against spikes. In contrast, usage quota information is used over a longer term and hence its implementation is different.
 
 ```
