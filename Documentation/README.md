@@ -389,6 +389,9 @@ Spend time going over supported bindings:
 https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
 
 ## CRON
+
+{second} {minute} {hour} {day} {month} {day of the week}
+
 | Expression     | Description    |  runs at   |
 | -------------- | -------------- | ---------- |
 | 0 * * * * *    |   every min    | 09:00:00; 09:01:00|
