@@ -619,7 +619,6 @@ Azure Cosmos DB offers five well-defined levels. From strongest to weakest, the 
 * Session
 * Consistent prefix
 * Eventual
-* Each level provid
 
 ![](five-consistency-levels.png)
 ## Change Feed
@@ -1023,6 +1022,10 @@ Azure Service Bus is a fully managed enterprise message broker with message queu
 
 # <ins> [Azure Nofitifaction Hubs](https://docs.microsoft.com/en-us/azure/notification-hubs/)
 Azure Notification Hubs provide an easy-to-use and scaled-out push engine that enables you to send notifications to any platform (iOS, Android, Windows, etc.) from any back-end (cloud or on-premises). Notification Hubs works great for both enterprise and consumer scenarios. Here are a few example scenarios:
+
+# <ins> [Azure App Config](https://docs.microsoft.com/en-us/azure/azure-app-configuration/)
+Azure App Configuration provides a service to centrally manage application settings and feature flags. Modern programs, especially programs running in a cloud, generally have many components that are distributed in nature. Spreading configuration settings across these components can lead to hard-to-troubleshoot errors during an application deployment. Use App Configuration to store all the settings for your application and secure their accesses in one place.
+
 # <ins>Glossary
 
 
